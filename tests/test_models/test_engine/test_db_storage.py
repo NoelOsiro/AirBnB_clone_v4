@@ -68,21 +68,111 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
-        self.assertIs(type(models.storage.all()), dict)
+        """Test that all returns a dictionary"""
+        storage = DBStorage()
+        self.assertIs(type(storage.all()), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+        result = storage.all()
+        self.assertIn(user_instance, result.values())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
-        """test that new adds an object to the database"""
+        """Test that new adds an object to the database"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        self.assertIn(key, storage.all().keys())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
-        """Test that save properly saves objects to file.json"""
+        """Test that save properly saves objects to the database"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        self.assertIn(key, storage.all().keys())
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_delete(self):
+        """Test that delete removes an object from the database"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        self.assertIn(key, storage.all().keys())
+        storage.delete(user_instance)
+        self.assertNotIn(key, storage.all().keys())
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_reload(self):
+        """Test that reload loads data from the database"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        self.assertIn(key, storage.all().keys())
+        storage.reload()
+        self.assertNotIn(key, storage.all().keys())
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test the get method of DBStorage"""
+        storage = DBStorage()
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+
+        # Test if get returns the correct instance
+        retrieved_instance = storage.get(User, user_instance.id)
+        self.assertEqual(retrieved_instance, user_instance)
+
+        # Test if get returns None for non-existing instances
+        non_existing_instance = storage.get(User, "non-existing-id")
+        self.assertIsNone(non_existing_instance)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test the count method of DBStorage"""
+        storage = DBStorage()
+        user_instance = User()
+        city_instance = City()
+        amenity_instance = Amenity()
+
+        storage.new(user_instance)
+        storage.new(city_instance)
+        storage.new(amenity_instance)
+        storage.save()
+
+        # Test count for all classes
+        total_count = storage.count()
+        self.assertEqual(total_count, 3)
+
+        # Test count for a specific class
+        user_count = storage.count(User)
+        self.assertEqual(user_count, 1)
+
+        city_count = storage.count(City)
+        self.assertEqual(city_count, 1)
+
+        amenity_count = storage.count(Amenity)
+        self.assertEqual(amenity_count, 1)
+
+        # Test count for a non-existing class
+        non_existing_count = storage.count(Place)
+        self.assertEqual(non_existing_count, 0)

@@ -113,3 +113,54 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """Test the get method of FileStorage"""
+        storage = FileStorage()
+
+        # Create an instance of a class and add it to storage
+        user_instance = User()
+        storage.new(user_instance)
+        storage.save()
+
+        # Test if get returns the correct instance
+        retrieved_instance = storage.get(User, user_instance.id)
+        self.assertEqual(retrieved_instance, user_instance)
+
+        # Test if get returns None for non-existing instances
+        non_existing_instance = storage.get(User, "non-existing-id")
+        self.assertIsNone(non_existing_instance)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """Test the count method of FileStorage"""
+        storage = FileStorage()
+
+        # Create instances of different classes and add them to storage
+        user_instance = User()
+        city_instance = City()
+        amenity_instance = Amenity()
+
+        storage.new(user_instance)
+        storage.new(city_instance)
+        storage.new(amenity_instance)
+        storage.save()
+
+        # Test count for all classes
+        total_count = storage.count()
+        self.assertEqual(total_count, 3)
+
+        # Test count for a specific class
+        user_count = storage.count(User)
+        self.assertEqual(user_count, 1)
+
+        city_count = storage.count(City)
+        self.assertEqual(city_count, 1)
+
+        amenity_count = storage.count(Amenity)
+        self.assertEqual(amenity_count, 1)
+
+        # Test count for a non-existing class
+        non_existing_count = storage.count(Place)
+        self.assertEqual(non_existing_count, 0)
