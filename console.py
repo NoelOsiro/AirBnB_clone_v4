@@ -46,10 +46,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except ValueError:
+                    except:
                         try:
                             value = float(value)
-                        except ValueError:
+                        except:
                             continue
                 new_dict[key] = value
         return new_dict
@@ -136,18 +136,19 @@ class HBNBCommand(cmd.Cmd):
                 if k in models.storage.all():
                     if len(args) > 2:
                         if len(args) > 3:
-                            try:
-                                if args[0] == "Place" and args[2] in integers:
-                                    args[3] = int(args[3])
-                                elif args[0] == "Place" and args[2] in floats:
-                                    args[3] = float(args[3])
-                                setattr(
-                                    models.storage.all()[k],
-                                    args[2],
-                                    args[3])
-                                models.storage.all()[k].save()
-                            except (ValueError, TypeError):
-                                print("** invalid value **")
+                            if args[0] == "Place":
+                                if args[2] in integers:
+                                    try:
+                                        args[3] = int(args[3])
+                                    except:
+                                        args[3] = 0
+                                elif args[2] in floats:
+                                    try:
+                                        args[3] = float(args[3])
+                                    except:
+                                        args[3] = 0.0
+                            setattr(models.storage.all()[k], args[2], args[3])
+                            models.storage.all()[k].save()
                         else:
                             print("** value missing **")
                     else:
@@ -158,7 +159,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
