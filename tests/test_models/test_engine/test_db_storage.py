@@ -93,7 +93,8 @@ class TestDBStorage(unittest.TestCase):
         user_instance = User()
         storage.new(user_instance)
         storage.save()
-        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        key = "{}.{}".format(user_instance.__class__.__name__,
+        user_instance.id)
         self.assertIn(key, storage.all().keys())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -103,7 +104,8 @@ class TestDBStorage(unittest.TestCase):
         user_instance = User()
         storage.new(user_instance)
         storage.save()
-        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        key = "{}.{}".format(user_instance.__class__.__name__,
+        user_instance.id)
         self.assertIn(key, storage.all().keys())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -113,7 +115,8 @@ class TestDBStorage(unittest.TestCase):
         user_instance = User()
         storage.new(user_instance)
         storage.save()
-        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        key = "{}.{}".format(user_instance.__class__.__name__,
+        user_instance.id)
         self.assertIn(key, storage.all().keys())
         storage.delete(user_instance)
         self.assertNotIn(key, storage.all().keys())
@@ -125,7 +128,8 @@ class TestDBStorage(unittest.TestCase):
         user_instance = User()
         storage.new(user_instance)
         storage.save()
-        key = "{}.{}".format(user_instance.__class__.__name__, user_instance.id)
+        key = "{}.{}".format(user_instance.__class__.__name__,
+        user_instance.id)
         self.assertIn(key, storage.all().keys())
         storage.reload()
         self.assertNotIn(key, storage.all().keys())
