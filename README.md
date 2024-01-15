@@ -1,8 +1,8 @@
 <img src="https://github.com/jarehec/AirBnB_clone_v3/blob/master/dev/HBTN-hbnb-Final.png" width="160" height=auto />
 
-# AirBnB Clone: Phase # 3
+# AirBnB Clone: Phase # 4
 
-: API with Swagger
+: Web dynamic
 
 ## Description
 
@@ -212,6 +212,7 @@ github repo
 
 ## Authors :black_nib:
 
+* __Noel Osiro__ - <[kai-dg](https://github.com/NoelOsiro)> | <[@osiroski](https://twitter.com/noelosiro)>
 * __MJ Johnson__ - <[@mj31508](https://github.com/mj31508)>
 * __David John Coleman II__ - <[davidjohncoleman.com](http://www.davidjohncoleman.com/)> | <[@djohncoleman](https://twitter.com/djohncoleman)>
 * __Kimberly Wong__ - <[kjowong](https://github.com/kjowong)> | <[@kjowong](https://twitter.com/kjowong)> | <[kjowong@gmail.com](kjowong@gmail.com)>
